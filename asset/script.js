@@ -11,12 +11,14 @@ const togglePlay = $('.btn-toggle-play');
 const nextBtn = $('.btn-next');
 const prevBtn = $('.btn-prev');
 const randomBtn = $('.btn-random');
+const repeatBtn = $('.btn-repeat');
 
 
 const app = {
     currentIndex: 0,
     isPlaying: false,
     isRandom: false,
+    isRepeat: false,
     songs: [
         {
             name: 'Mất Kết Nối',
@@ -84,18 +86,18 @@ const app = {
     },
 
     render: function() {
-        const htmls = this.songs.map(song => {
+        const htmls = this.songs.map((song, index) => {
             return `
-            <div class="song">
+            <div class="song ${this.currentIndex === index ? 'active':''}">
                 <div class="thumb" style="background-image: url('${song.img}')">
                 </div>
                 <div class="body">
                     <h3 class="title">${song.name}</h3>
                     <p class="author">${song.singer}</p>
                 </div>
-                <div class="option">
+                 <!-- <div class="option">
                     <i class="fas fa-ellipsis-h"></i>
-                </div>
+                </div> -->
             </div>
             `
         })
@@ -108,7 +110,7 @@ const app = {
         document.onscroll = function() {
             const srollTop = window.scrollY ||  document.documentElement.srollTop;
             const newCdWidth = cdWidth - srollTop;
-            console.log(newCdWidth);
+            // console.log(newCdWidth);
             if(isNaN(newCdWidth)) {
                 cd.style.width = cdWidth + 'px';
                 cd.style.opacity = 1;
@@ -159,7 +161,7 @@ const app = {
 
         // xu li khi tua bai hat
         progress.oninput = function (e) {
-            console.log(e.target.value, e.target.value / 100 * audio.duration);
+            // console.log(e.target.value, e.target.value / 100 * audio.duration);
             audio.currentTime = (e.target.value / 100 * audio.duration);
         }
 
@@ -184,12 +186,28 @@ const app = {
         randomBtn.onclick = function () {
             _this.isRandom = !_this.isRandom;
             randomBtn.classList.toggle('active', _this.isRandom);
+            if(_this.isRepeat) {
+                _this.isRepeat = !_this.isRepeat;
+                repeatBtn.classList.toggle('active', _this.isRepeat);
+            }
+        }
+
+        // xu li lap lai 1 song
+        repeatBtn.onclick = function () {
+            _this.isRepeat = !_this.isRepeat;
+            repeatBtn.classList.toggle('active', _this.isRepeat);
+            if(_this.isRandom) {
+                _this.isRandom = !_this.isRandom;
+                randomBtn.classList.toggle('active', _this.isRandom);
+            }
         }
 
         audio.onended = function () {
             if(_this.isRandom) {
                 _this.playRandomSong();
-            }else {
+            }else if (_this.isRepeat) {
+                audio.play();
+            }else { 
                 _this.nextSong();
                 audio.play();
             }
@@ -198,10 +216,29 @@ const app = {
     },
 
     loadCurrentSong: function() {
-        
         heading.innerText = this.currentSong.name;
         cdThumb.style.backgroundImage = `url('${this.currentSong.img}')`
         audio.src = this.currentSong.patht;
+        this.render();
+        this.srollToActiveSong();
+    },
+
+    srollToActiveSong: function() {
+        _this = this;
+        setTimeout(function() {
+            if(_this.currentIndex === 0 || _this.currentIndex === 1) {
+                $('.song.active').scrollIntoView( {
+                    behavior: 'smooth',
+                    block: 'end',
+                });
+            }else {
+                $('.song.active').scrollIntoView( {
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    
+                });
+            }
+        }, 500);
     },
 
     nextSong: function() {
@@ -227,6 +264,7 @@ const app = {
         }while(newIndex === this.currentIndex);
         this.currentIndex = newIndex;
         this.loadCurrentSong();
+        // làm thêm 1 cái mảng chứa những bài hát đã phát để không random lại
     },
 
     start: function() {
