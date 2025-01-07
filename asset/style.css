@@ -186,4 +186,16 @@
     color: #999;
     font-size: 18px;
   }
+
+  .darkMode__icon {
+    font-size: 25px;
+    position: absolute;
+    /* margin-top: 2px;
+    margin-left: 4px; */
+    padding: 8px;
+  } 
+
+  .darkMode__icon:hover {
+    cursor: pointer;
+  }
   
