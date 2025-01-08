@@ -13,12 +13,20 @@ const prevBtn = $('.btn-prev');
 const randomBtn = $('.btn-random');
 const repeatBtn = $('.btn-repeat');
 
+const PLAYER_STORAGE_KEY = 'QuocDaiThichUtThuongLam';
+
 
 const app = {
     currentIndex: 0,
     isPlaying: false,
     isRandom: false,
     isRepeat: false,
+    config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
+    setConfig: function(key, value) {
+        this.config[key] = value;
+        localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config));
+    },
+
     songs: [
         {
             name: 'Mất Kết Nối',
@@ -88,16 +96,16 @@ const app = {
     render: function() {
         const htmls = this.songs.map((song, index) => {
             return `
-            <div class="song ${this.currentIndex === index ? 'active':''}">
+            <div class="song ${this.currentIndex === index ? 'active':''}" data-index="${index  }">
                 <div class="thumb" style="background-image: url('${song.img}')">
                 </div>
                 <div class="body">
                     <h3 class="title">${song.name}</h3>
                     <p class="author">${song.singer}</p>
                 </div>
-                 <!-- <div class="option">
+                <div class="option">
                     <i class="fas fa-ellipsis-h"></i>
-                </div> -->
+                </div>
             </div>
             `
         })
@@ -190,6 +198,8 @@ const app = {
                 _this.isRepeat = !_this.isRepeat;
                 repeatBtn.classList.toggle('active', _this.isRepeat);
             }
+            _this.setConfig('isRepeat', _this.isRepeat);
+            _this.setConfig('isRandom', _this.isRandom);
         }
 
         // xu li lap lai 1 song
@@ -200,6 +210,8 @@ const app = {
                 _this.isRandom = !_this.isRandom;
                 randomBtn.classList.toggle('active', _this.isRandom);
             }
+            _this.setConfig('isRepeat', _this.isRepeat);
+            _this.setConfig('isRandom', _this.isRandom);
         }
 
         audio.onended = function () {
@@ -213,6 +225,25 @@ const app = {
             }
             audio.currentTime = 0;
         }
+
+        //lang nghe hanh vi click vao playlist
+        playlist.onclick = function(e) {
+            const songNode = e.target.closest('.song:not(.active)');
+            if(songNode || e.target.closest('.option')) {
+                // xu li click vao song
+                if(songNode) {
+                    _this.currentIndex = Number(songNode.dataset.index);
+                    _this.loadCurrentSong();
+                    _this.render();
+                    audio.play();
+                }
+
+                // xu li click vao option
+                if(e.target.closest('.option')) {
+
+                }
+            }
+        }
     },
 
     loadCurrentSong: function() {
@@ -221,6 +252,11 @@ const app = {
         audio.src = this.currentSong.patht;
         this.render();
         this.srollToActiveSong();
+    },
+
+    loadConfig: function() {
+        this.isRandom = this.config.isRandom;
+        this.isRepeat = this.config.isRepeat;
     },
 
     srollToActiveSong: function() {
@@ -235,7 +271,6 @@ const app = {
                 $('.song.active').scrollIntoView( {
                     behavior: 'smooth',
                     block: 'nearest',
-                    
                 });
             }
         }, 500);
@@ -268,10 +303,15 @@ const app = {
     },
 
     start: function() {
+        this.loadConfig();
         this.defineProperties();
         this.handleEvent();
         this.loadCurrentSong();
         this.render();
+
+        //hien thi lan dau 
+        randomBtn.classList.toggle('active', _this.isRandom);
+        repeatBtn.classList.toggle('active', _this.isRepeat);
     }
 } 
 
