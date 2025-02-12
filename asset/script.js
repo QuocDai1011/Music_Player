@@ -12,6 +12,7 @@ const nextBtn = $('.btn-next');
 const prevBtn = $('.btn-prev');
 const randomBtn = $('.btn-random');
 const repeatBtn = $('.btn-repeat');
+const darkModeBtn = $('.darkMode__icon');
 
 const PLAYER_STORAGE_KEY = 'QuocDaiThichUtThuongLam';
 
@@ -22,6 +23,7 @@ const app = {
     isRandom: false,
     isRepeat: false,
     config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
+    isDarkMode: false,
     setConfig: function(key, value) {
         this.config[key] = value;
         localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config));
@@ -96,11 +98,11 @@ const app = {
     render: function() {
         const htmls = this.songs.map((song, index) => {
             return `
-            <div class="song ${this.currentIndex === index ? 'active':''}" data-index="${index  }">
+            <div class="song ${this.currentIndex === index ? 'active':''} darkMode" data-index="${index  }">
                 <div class="thumb" style="background-image: url('${song.img}')">
                 </div>
                 <div class="body">
-                    <h3 class="title">${song.name}</h3>
+                    <h3 class="title darkMode">${song.name}</h3>
                     <p class="author">${song.singer}</p>
                 </div>
                 <div class="option">
@@ -244,6 +246,11 @@ const app = {
                 }
             }
         }
+
+        // darkModeBtn.onclick = function() {
+        //     _this.isDarkMode = !_this.isDarkMode;
+        //     console.log(_this.isDarkMode);
+        // }
     },
 
     loadCurrentSong: function() {

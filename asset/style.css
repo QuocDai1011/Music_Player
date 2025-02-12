@@ -198,4 +198,43 @@
   .darkMode__icon:hover {
     cursor: pointer;
   }
+
+  .player.darkMode, 
+  .dashboard.darkMode, html {
+    background-color: #121212;
+  }
+
+  header h2.darkMode{
+    color: #E0E0E0 !important;
+  }
+
+  header h4.darkMode {
+    color: #00FFB3 ;
+  }
+
+  .darkMode__icon.darkMode {
+    color: #008F8C;
+  }
+  
+  .song.darkMode {
+    background-color: #1d2a35;
+  }
+
+  /* #e2dcd9 */
+  .title.darkMode {
+    color: #e2dcd9;
+  }
+
+  .btn.darkMode {
+    color: #008F8C;
+  }
+
+  .btn-toggle-play.darkMode {
+    background-color: #1d2a35;
+  }
+
+  
+
+
+
   
