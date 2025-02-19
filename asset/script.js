@@ -98,11 +98,11 @@ const app = {
     render: function() {
         const htmls = this.songs.map((song, index) => {
             return `
-            <div class="song ${this.currentIndex === index ? 'active':''} darkMode" data-index="${index  }">
+            <div class="song ${this.currentIndex === index ? 'active':''} ${this.isDarkMode === true ? 'darkMode':''}" data-index="${index  }">
                 <div class="thumb" style="background-image: url('${song.img}')">
                 </div>
                 <div class="body">
-                    <h3 class="title darkMode">${song.name}</h3>
+                    <h3 class="title ${this.isDarkMode === true ? 'darkMode':''}">${song.name}</h3>
                     <p class="author">${song.singer}</p>
                 </div>
                 <div class="option">
@@ -247,10 +247,57 @@ const app = {
             }
         }
 
-        // darkModeBtn.onclick = function() {
-        //     _this.isDarkMode = !_this.isDarkMode;
-        //     console.log(_this.isDarkMode);
-        // }
+        darkModeBtn.onclick = function() {
+            if(_this.isDarkMode === false) {
+                //bat dark mode
+                _this.isDarkMode = !_this.isDarkMode;
+                $('.player').classList.add('darkMode');
+                $('html').classList.add('darkMode');
+                $('.dashboard').classList.add('darkMode');
+                $('.darkMode__icon').classList.add('darkMode');
+                $('.title').classList.add('darkMode');
+                $('.btn').classList.add('darkMode');
+                $('.btn-toggle-play').classList.add('darkMode');
+
+                var songEles = document.querySelectorAll('.song');
+                for(var songEle of songEles) {
+                    songEle.classList.add('darkMode');
+                }
+                var titleEles = $$('header h2');
+                for(var titleEle of titleEles) {
+                    titleEle.classList.add('darkMode');
+                }
+                var authorEles = $$('header h4');
+                for(var authorEle of authorEles) {
+                    authorEle.classList.add('darkMode');
+                }
+
+
+            }else {
+                //tat dark mode
+                _this.isDarkMode = !_this.isDarkMode;
+                $('.player').classList.remove('darkMode');
+                $('html').classList.remove('darkMode');
+                $('.dashboard').classList.remove('darkMode');
+                $('.darkMode__icon').classList.remove('darkMode');
+                $('.title').classList.remove('darkMode');
+                $('.btn').classList.remove('darkMode');
+                $('.btn-toggle-play').classList.remove('darkMode');
+                var songEles = document.querySelectorAll('.song');
+                for(var songEle of songEles) {
+                    songEle.classList.remove('darkMode');
+                }
+
+                var titleEles = $$('header h2');
+                for(var titleEle of titleEles) {
+                    titleEle.classList.remove('darkMode');
+                }
+                var authorEles = $$('header h4');
+                for(var authorEle of authorEles) {
+                    authorEle.classList.remove('darkMode');
+                }
+            }
+        }
     },
 
     loadCurrentSong: function() {

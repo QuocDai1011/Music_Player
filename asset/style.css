@@ -200,7 +200,7 @@
   }
 
   .player.darkMode, 
-  .dashboard.darkMode, html {
+  .dashboard.darkMode, html.darkMode {
     background-color: #121212;
   }
 
@@ -232,6 +232,7 @@
   .btn-toggle-play.darkMode {
     background-color: #1d2a35;
   }
+
 
   
 
