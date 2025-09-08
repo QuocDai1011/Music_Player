@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  # Production service: build image từ Dockerfile và serve bằng nginx
+  frontend:
+    build: .
+    image: my-frontend:prod
+    ports:
+      - "5500:80"          # host:container (mở http://localhost:5500)
+    restart: unless-stopped
+
+  # Development service: profile "dev"
+  # Sử dụng node image + live-server để có hot-reload (tự reload trình duyệt khi file thay đổi)
+  frontend_dev:
+    image: node:18
+    profiles: ["dev"]
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app    # mount source từ host vào container => thay đổi hiện ngay
+    command: >
+      sh -c "npx --yes live-server --port=5500 --host=0.0.0.0 --no-browser --watch=."
+    ports:
+      - "5500:5500"
+    environment:
+      - NODE_ENV=development
+    # Optional: tell docker compose watch to observe the host folder (it helps with compose watch)
+    develop:
+      watch:
+        - path: .
+          action: sync
+          target: /usr/src/app

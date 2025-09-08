@@ -67,24 +67,11 @@ const app = {
             img: './asset/img/MONO.jpg'
         },
         {
-            name: '016 Tan Du',
+            name: 'Nơi Này Có Anh',
             singer: 'Sơn Tùng M-TP',
-            patht: './asset/music/016TANDU.mp3',
-            img: './asset/img/016TanDu.jpg'
+            patht: './asset/music/NoiNayCoAnh.mp3',
+            img: './asset/img/MONO.jpg'
         },
-        {
-            name: '016 Tan Du',
-            singer: 'Sơn Tùng M-TP',
-            patht: './asset/music/016TANDU.mp3',
-            img: './asset/img/016TanDu.jpg'
-        },
-        {
-            name: '016 Tan Du',
-            singer: 'Sơn Tùng M-TP',
-            patht: './asset/music/016TANDU.mp3',
-            img: './asset/img/016TanDu.jpg'
-        },
-        
     ],
 
     defineProperties: function() {
